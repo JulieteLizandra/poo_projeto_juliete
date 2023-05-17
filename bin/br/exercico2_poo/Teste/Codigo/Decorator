@@ -1,0 +1,90 @@
+Claro! O padrão de projeto Decorator é um padrão estrutural que permite adicionar funcionalidades a um objeto de forma dinâmica, envolvendo-o em objetos decoradores adicionais.
+Ele oferece uma alternativa flexível à criação de subclasses para estender funcionalidades, permitindo que os objetos sejam decorados com diferentes comportamentos de forma independente.
+
+O padrão Decorator é útil quando você precisa adicionar funcionalidades a um objeto existente de maneira dinâmica, sem modificar sua estrutura interna ou criar subclasses para cada combinação de funcionalidades.
+Ele promove o princípio do "aberto para extensão, fechado para modificação", permitindo que novos comportamentos sejam adicionados sem alterar o código existente.
+
+A estrutura básica do padrão Decorator envolve as seguintes entidades:
+
+1. Componente (Component): É a interface ou classe abstrata que define a interface comum tanto para os objetos concretos quanto para os decoradores.
+Ele declara os métodos que serão implementados pelos objetos concretos e pelos decoradores.
+
+2. Componente Concreto (Concrete Component): É a implementação concreta da interface Componente.
+Ele define o objeto base ao qual funcionalidades adicionais podem ser adicionadas pelos decoradores.
+
+3. Decorador (Decorator): É a classe abstrata que implementa a interface Componente e mantém uma referência a um objeto Componente.
+Ele atua como uma base para os decoradores concretos, fornecendo uma interface comum para todos os decoradores.
+
+4. Decorador Concreto (Concrete Decorator): São as implementações concretas dos decoradores.
+Eles estendem a classe Decorador e adicionam as funcionalidades extras desejadas, chamando o método do decorador base e/ou adicionando comportamentos adicionais.
+
+Dessa forma, é possível encadear vários decoradores em diferentes combinações, permitindo que os objetos sejam decorados com várias camadas de funcionalidades adicionais.
+
+Aqui está um exemplo simplificado em Java para ilustrar o padrão Decorator:
+
+```java
+// Componente
+interface Component {
+    void operation();
+}
+
+// Componente Concreto
+class ConcreteComponent implements Component {
+    @Override
+    public void operation() {
+        System.out.println("Operação do componente concreto.");
+    }
+}
+
+// Decorador
+abstract class Decorator implements Component {
+    private Component component;
+
+    public Decorator(Component component) {
+        this.component = component;
+    }
+
+    @Override
+    public void operation() {
+        component.operation();
+    }
+}
+
+// Decorador Concreto
+class ConcreteDecoratorA extends Decorator {
+    public ConcreteDecoratorA(Component component) {
+        super(component);
+    }
+
+    @Override
+    public void operation() {
+        super.operation();
+        System.out.println("Funcionalidade adicional do decorador A.");
+    }
+}
+
+// Decorador Concreto
+class ConcreteDecoratorB extends Decorator {
+    public ConcreteDecoratorB(Component component) {
+        super(component);
+    }
+
+    @Override
+    public void operation() {
+        super.operation();
+        System.out.println("Funcionalidade adicional do decorador B.");
+    }
+}
+
+// Exemplo de uso
+public class DecoratorPatternExample {
+    public static void main(String[] args) {
+        Component component = new ConcreteComponent();
+
+        // Decorando com ConcreteDecoratorA
+        Component decoratedComponentA = new ConcreteDecoratorA(component);
+        decoratedComponentA.operation();
+
+        System.out.println("--------------------");
+
+        // Decorando com ConcreteDecoratorB

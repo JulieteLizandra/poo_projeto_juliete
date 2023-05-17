@@ -1,0 +1,79 @@
+Certamente! O padrão de projeto Composite é um padrão estrutural que permite tratar objetos individuais e coleções de objetos de maneira uniforme, criando uma estrutura hierárquica.
+Ele permite que os clientes tratem os objetos compostos (compostos por outros objetos) e os objetos individuais de maneira uniforme, simplificando a interação entre eles.
+O padrão Composite é útil quando você deseja representar uma estrutura hierárquica de objetos, onde os objetos individuais (folhas) e os objetos compostos (nós) possuem interfaces comuns.
+Isso é particularmente útil quando você precisa realizar operações em toda a estrutura, independentemente se é um objeto individual ou um objeto composto.
+A estrutura básica do padrão Composite envolve duas principais entidades:
+
+1. Componente (Component): É a interface ou classe abstrata que define a interface comum para todos os objetos na estrutura, sejam eles objetos individuais ou compostos. Ela declara os métodos para operações comuns que podem ser realizadas em todos os objetos.
+
+2. Folha (Leaf): É a implementação concreta da interface Componente. Representa os objetos individuais que não possuem filhos na estrutura hierárquica. Eles implementam os métodos da interface Componente.
+
+3. Composto (Composite): É uma implementação da interface Componente que pode conter outros objetos Componente, sejam eles folhas ou outros compostos. Ele define métodos para adicionar, remover e obter filhos, além de implementar os métodos da interface Componente redirecionando-os para seus filhos.
+
+Dessa forma, um objeto composto pode ser composto por outros objetos compostos e/ou objetos individuais, criando uma estrutura em árvore.
+
+Aqui está um exemplo simplificado em Java para ilustrar o padrão Composite:
+
+```java
+// Componente
+interface Component {
+    void operation();
+}
+
+// Folha
+class Leaf implements Component {
+    @Override
+    public void operation() {
+        System.out.println("Executando operação em uma folha.");
+    }
+}
+
+// Composto
+class Composite implements Component {
+    private List<Component> children = new ArrayList<>();
+
+    public void add(Component component) {
+        children.add(component);
+    }
+
+    public void remove(Component component) {
+        children.remove(component);
+    }
+
+    @Override
+    public void operation() {
+        System.out.println("Executando operação em um objeto composto.");
+        for (Component child : children) {
+            child.operation();
+        }
+    }
+}
+
+// Exemplo de uso
+public class CompositePatternExample {
+    public static void main(String[] args) {
+        Component leaf1 = new Leaf();
+        Component leaf2 = new Leaf();
+
+        Composite composite1 = new Composite();
+        composite1.add(leaf1);
+        composite1.add(leaf2);
+
+        Component leaf3 = new Leaf();
+        Component leaf4 = new Leaf();
+
+        Composite composite2 = new Composite();
+        composite2.add(leaf3);
+        composite2.add(leaf4);
+        composite2.add(composite1);
+
+        composite2.operation();
+    }
+}
+```
+
+Neste exemplo, temos a interface `Component` que define o método `operation()` comum para todos os objetos na estrutura hierárquica.
+A classe `Leaf` é a implementação concreta dessa interface e representa os objetos individuais.
+
+A classe `Composite` é a implementação da interface `Component` que representa os objetos compostos.
+Ela possui uma lista de `Component` chamada `children

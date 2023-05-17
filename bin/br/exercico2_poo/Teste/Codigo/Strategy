@@ -1,0 +1,79 @@
+//**O padrão de projeto Strategy, também conhecido como Padrão Estratégia, é um padrão comportamental que permite a seleção de um algoritmo específico a ser utilizado em tempo de execução.
+Ele define uma família de algoritmos encapsulados em classes separadas, tornando-os intercambiáveis e permitindo que o cliente utilize diferentes algoritmos sem depender diretamente deles.
+O padrão Strategy é útil quando existe a necessidade de alternar entre diferentes algoritmos ou estratégias em tempo de execução, ou quando é necessário evitar a duplicação de código similar, mas com pequenas variações.
+Ele promove o princípio do "separe as partes que mudam das que permanecem iguais" (Separation of Concerns), possibilitando a fácil adição, remoção ou modificação de estratégias sem afetar o código do cliente.
+A estrutura básica do padrão Strategy envolve a definição de uma interface ou classe abstrata chamada "Strategy" que define os métodos comuns para todos os algoritmos.
+Em seguida, são criadas classes concretas que implementam essa interface, representando cada uma das estratégias específicas.
+O cliente utiliza um objeto estratégia, mas não conhece a implementação detalhada, trabalhando apenas com a interface comum.
+Durante a execução, o cliente pode selecionar uma estratégia específica e atribuí-la a um objeto estratégia. Dessa forma, o cliente pode invocar os métodos da estratégia sem se preocupar com a implementação subjacente.
+A escolha da estratégia pode ser feita através de parâmetros, configurações ou até mesmo por meio de uma fábrica que instancia o objeto estratégia.
+Em resumo, o padrão Strategy fornece uma maneira flexível de encapsular diferentes algoritmos e estratégias, permitindo que eles sejam trocados facilmente sem afetar o código do cliente.
+Isso aumenta a modularidade, reutilização de código e facilita a manutenção do sistema como um todo.
+**\\
+
+// Interface Strategy
+interface TaxCalculationStrategy {
+    double calculateTax(double productPrice);
+}
+
+// Implementações concretas das estratégias
+class NoTaxCalculationStrategy implements TaxCalculationStrategy {
+    @Override
+    public double calculateTax(double productPrice) {
+        return 0.0; // Isento de impostos
+    }
+}
+
+class LowTaxCalculationStrategy implements TaxCalculationStrategy {
+    @Override
+    public double calculateTax(double productPrice) {
+        return 0.1 * productPrice; // Imposto baixo (10%)
+    }
+}
+
+class HighTaxCalculationStrategy implements TaxCalculationStrategy {
+    @Override
+    public double calculateTax(double productPrice) {
+        return 0.2 * productPrice; // Imposto alto (20%)
+    }
+}
+
+// Classe Cliente que utiliza o padrão Strategy
+class Product {
+    private String name;
+    private double price;
+    private TaxCalculationStrategy taxStrategy;
+
+    public Product(String name, double price, TaxCalculationStrategy taxStrategy) {
+        this.name = name;
+        this.price = price;
+        this.taxStrategy = taxStrategy;
+    }
+
+    public double calculateTax() {
+        return taxStrategy.calculateTax(price);
+    }
+
+    public void displayProductInfo() {
+        System.out.println("Product: " + name);
+        System.out.println("Price: $" + price);
+        System.out.println("Tax: $" + calculateTax());
+        System.out.println("Total price: $" + (price + calculateTax()));
+        System.out.println("------------------------");
+    }
+}
+
+// Exemplo de uso
+public class StrategyPatternExample {
+    public static void main(String[] args) {
+        // Criando produtos com diferentes estratégias de impostos
+        Product book = new Product("Book", 29.99, new NoTaxCalculationStrategy());
+        Product phone = new Product("Phone", 399.99, new HighTaxCalculationStrategy());
+        Product toy = new Product("Toy", 19.99, new LowTaxCalculationStrategy());
+
+        // Exibindo informações dos produtos
+        book.displayProductInfo();
+        phone.displayProductInfo();
+        toy.displayProductInfo();
+    }
+}
